@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Casandra Lee</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,system-ui,sans-serif;background:#f5f5f4;color:#1a1a1a;line-height:1.5}
+h1{font-size:1.4rem;font-weight:600}
+h2{font-size:1.15rem;font-weight:600;margin:0 0 12px}
+h3{font-size:1rem;font-weight:600;margin:0 0 8px}
+
+/* Layout */
+.topbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar .actions{display:flex;gap:8px}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e5e5e5;padding-bottom:0}
+.tab{padding:10px 16px;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:500;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab:hover{color:#1a1a1a}
+.tab.active{color:#1a1a1a;border-bottom-color:#7c8b6b}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Cards */
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;margin-bottom:12px}
+.card h3{display:flex;align-items:center;gap:8px}
+
+/* Image list */
+.img-list{display:flex;flex-direction:column;gap:8px}
+.img-item{display:flex;align-items:center;gap:12px;padding:10px;background:#fafaf9;border:1px solid #e5e5e5;border-radius:8px;cursor:grab;transition:box-shadow .15s}
+.img-item:active{cursor:grabbing}
+.img-item.drag-over{box-shadow:0 0 0 2px #7c8b6b}
+.img-item img{width:80px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.img-item .info{flex:1;min-width:0}
+.img-item .info input{width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem}
+.img-item .info label{font-size:.75rem;color:#888;display:block;margin-bottom:2px}
+.img-item .btns{display:flex;gap:4px;flex-shrink:0}
+
+/* Buttons */
+.btn{padding:6px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:.85rem;transition:.15s}
+.btn:hover{background:#f0f0f0}
+.btn-primary{background:#7c8b6b;color:#fff;border-color:#7c8b6b}
+.btn-primary:hover{background:#6b7a5c}
+.btn-danger{color:#c44;border-color:#c44}
+.btn-danger:hover{background:#fef2f2}
+.btn-sm{padding:4px 8px;font-size:.78rem}
+.btn-icon{padding:4px 6px;font-size:1rem;line-height:1;background:none;border:none;cursor:pointer;opacity:.5}
+.btn-icon:hover{opacity:1}
+
+/* Upload zone */
+.upload-zone{border:2px dashed #ccc;border-radius:12px;padding:30px;text-align:center;color:#888;cursor:pointer;transition:.15s;margin-bottom:12px}
+.upload-zone:hover,.upload-zone.drag{border-color:#7c8b6b;color:#7c8b6b;background:#f8faf6}
+.upload-zone input{display:none}
+
+/* Shop item form */
+.shop-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.shop-form label{font-size:.75rem;color:#888}
+.shop-form input,.shop-form select{width:100%;padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem}
+.shop-form .full{grid-column:1/-1}
+
+/* Section editor */
+.section-editor{border:1px solid #e5e5e5;border-radius:10px;padding:14px;margin-bottom:14px;background:#fefefe}
+.section-editor textarea{width:100%;min-height:60px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem;resize:vertical}
+
+/* Status */
+.status{position:fixed;bottom:20px;right:20px;padding:10px 18px;background:#333;color:#fff;border-radius:8px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
+.status.show{opacity:1}
+
+/* Checkbox row */
+.check-row{display:flex;gap:6px;align-items:center;margin:4px 0}
+.check-row input[type=checkbox]{accent-color:#7c8b6b}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Site Admin</h1>
+  <div class="actions">
+    <button class="btn" onclick="saveData()">Save</button>
+    <button class="btn btn-primary" onclick="publish()">Publish Site</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+</div>
+
+<div class="status" id="status"></div>
+
+<script>
+var DATA = null;
+var PAGE_KEYS = ["illustrations","paintings","childrens-books","brand-illustrations","shop"];
+
+function showStatus(msg) {
+  var el = document.getElementById("status");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(function(){ el.classList.remove("show"); }, 2000);
+}
+
+// ---- Load data ----
+fetch("/api/data").then(r=>r.json()).then(function(d){
+  DATA = d;
+  buildTabs();
+  renderAll();
+});
+
+function buildTabs() {
+  var tabs = document.getElementById("tabs");
+  var labels = {"illustrations":"Illustrations","paintings":"Paintings","childrens-books":"Children's Books","brand-illustrations":"Brand Illustrations","shop":"Shop"};
+  tabs.innerHTML = "";
+  PAGE_KEYS.forEach(function(k, i){
+    var btn = document.createElement("button");
+    btn.className = "tab" + (i===0?" active":"");
+    btn.textContent = labels[k];
+    btn.dataset.key = k;
+    btn.onclick = function(){ switchTab(k); };
+    tabs.appendChild(btn);
+  });
+}
+
+function switchTab(key) {
+  document.querySelectorAll(".tab").forEach(function(t){ t.classList.toggle("active", t.dataset.key===key); });
+  document.querySelectorAll(".tab-content").forEach(function(p){ p.classList.toggle("active", p.dataset.key===key); });
+}
+
+function renderAll() {
+  var panels = document.getElementById("panels");
+  panels.innerHTML = "";
+  PAGE_KEYS.forEach(function(k, i){
+    var div = document.createElement("div");
+    div.className = "tab-content" + (i===0?" active":"");
+    div.dataset.key = k;
+    if (k === "shop") div.innerHTML = renderShop();
+    else if (DATA.pages[k].type === "grid") div.innerHTML = renderGrid(k);
+    else div.innerHTML = renderSections(k);
+    panels.appendChild(div);
+  });
+  bindDragDrop();
+}
+
+// ---- Grid pages (illustrations, paintings) ----
+function renderGrid(pageKey) {
+  var p = DATA.pages[pageKey];
+  var html = '<div class="card"><h2>' + p.title + '</h2>';
+  html += uploadZone(pageKey);
+  html += '<div class="img-list" data-page="'+pageKey+'">';
+  p.images.forEach(function(img, i){
+    html += imgItem(pageKey, i, img);
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function imgItem(pageKey, i, img) {
+  return '<div class="img-item" draggable="true" data-page="'+pageKey+'" data-idx="'+i+'">'
+    + '<img src="/'+img.src+'" alt="">'
+    + '<div class="info">'
+    + '<label>Caption (hover text)</label>'
+    + '<input value="'+escAttr(img.caption||"")+'" onchange="updateField(\''+pageKey+'\','+i+',\'caption\',this.value)" placeholder="Leave blank for no caption">'
+    + '<label style="margin-top:4px">Alt text</label>'
+    + '<input value="'+escAttr(img.alt||"")+'" onchange="updateField(\''+pageKey+'\','+i+',\'alt\',this.value)">'
+    + '</div>'
+    + '<div class="btns">'
+    + '<button class="btn btn-sm btn-danger" onclick="deleteImg(\''+pageKey+'\','+i+')">Delete</button>'
+    + '</div></div>';
+}
+
+function uploadZone(id) {
+  return '<div class="upload-zone" onclick="document.getElementById(\'file-'+id+'\').click()" '
+    + 'ondragover="event.preventDefault();this.classList.add(\'drag\')" '
+    + 'ondragleave="this.classList.remove(\'drag\')" '
+    + 'ondrop="handleDrop(event,\''+id+'\');this.classList.remove(\'drag\')">'
+    + 'Drop image here or click to upload'
+    + '<input type="file" id="file-'+id+'" accept="image/*" multiple onchange="handleFiles(this.files,\''+id+'\')">'
+    + '</div>';
+}
+
+// ---- Section pages (children's books, brand illustrations) ----
+function renderSections(pageKey) {
+  var p = DATA.pages[pageKey];
+  var html = '<div class="card"><h2>' + p.title + '</h2>';
+  p.sections.forEach(function(sec, si){
+    html += '<div class="section-editor">';
+    html += '<h3>'+sec.title+' <button class="btn btn-sm btn-danger" onclick="deleteSection(\''+pageKey+'\','+si+')">Remove section</button></h3>';
+    html += '<label style="font-size:.75rem;color:#888">Section title</label>';
+    html += '<input style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem;margin-bottom:6px" value="'+escAttr(sec.title)+'" onchange="DATA.pages[\''+pageKey+'\'].sections['+si+'].title=this.value">';
+    html += '<label style="font-size:.75rem;color:#888">Description (HTML allowed)</label>';
+    html += '<textarea onchange="DATA.pages[\''+pageKey+'\'].sections['+si+'].description=this.value">'+escHtml(sec.description)+'</textarea>';
+    html += uploadZone(pageKey+'-'+si);
+    html += '<div class="img-list" data-page="'+pageKey+'" data-section="'+si+'">';
+    sec.images.forEach(function(img, i){
+      html += sectionImgItem(pageKey, si, i, img);
+    });
+    html += '</div></div>';
+  });
+  html += '<button class="btn" onclick="addSection(\''+pageKey+'\')">+ Add section</button>';
+  html += '</div>';
+  return html;
+}
+
+function sectionImgItem(pageKey, si, i, img) {
+  var fw = img.fullWidth ? ' checked' : '';
+  return '<div class="img-item" draggable="true" data-page="'+pageKey+'" data-section="'+si+'" data-idx="'+i+'">'
+    + '<img src="/'+img.src+'" alt="">'
+    + '<div class="info">'
+    + '<label>Alt text</label>'
+    + '<input value="'+escAttr(img.alt||"")+'" onchange="updateSectionField(\''+pageKey+'\','+si+','+i+',\'alt\',this.value)">'
+    + '<label>Caption (hover)</label>'
+    + '<input value="'+escAttr(img.caption||"")+'" onchange="updateSectionField(\''+pageKey+'\','+si+','+i+',\'caption\',this.value)" placeholder="Optional">'
+    + '<div class="check-row"><input type="checkbox"'+fw+' onchange="updateSectionField(\''+pageKey+'\','+si+','+i+',\'fullWidth\',this.checked)"><label>Full width</label></div>'
+    + '</div>'
+    + '<div class="btns">'
+    + '<button class="btn btn-sm btn-danger" onclick="deleteSectionImg(\''+pageKey+'\','+si+','+i+')">Delete</button>'
+    + '</div></div>';
+}
+
+// ---- Shop ----
+function renderShop() {
+  var html = '<div class="card"><h2>Shop Items</h2>';
+  html += '<button class="btn" onclick="addShopItem()" style="margin-bottom:12px">+ Add item</button>';
+  html += '<div class="img-list" data-page="shop">';
+  DATA.shop.forEach(function(w, i){
+    html += shopItem(w, i);
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function shopItem(w, i) {
+  return '<div class="img-item" draggable="true" data-page="shop" data-idx="'+i+'" style="align-items:flex-start">'
+    + '<img src="/'+w.thumb+'" alt="">'
+    + '<div class="info"><div class="shop-form">'
+    + '<div><label>Title</label><input value="'+escAttr(w.title)+'" onchange="DATA.shop['+i+'].title=this.value"></div>'
+    + '<div><label>Type</label><select onchange="DATA.shop['+i+'].type=this.value"><option value="original"'+(w.type==='original'?' selected':'')+'>Original</option><option value="print"'+(w.type==='print'?' selected':'')+'>Print</option></select></div>'
+    + '<div><label>Price</label><input value="'+escAttr(w.price)+'" onchange="DATA.shop['+i+'].price=this.value"></div>'
+    + '<div><label>Medium</label><input value="'+escAttr(w.medium)+'" onchange="DATA.shop['+i+'].medium=this.value"></div>'
+    + '<div><label>Dimensions</label><input value="'+escAttr(w.dimensions)+'" onchange="DATA.shop['+i+'].dimensions=this.value"></div>'
+    + '<div><label>Year</label><input type="number" value="'+w.year+'" onchange="DATA.shop['+i+'].year=parseInt(this.value)"></div>'
+    + '<div class="full"><label>Description</label><input value="'+escAttr(w.description)+'" onchange="DATA.shop['+i+'].description=this.value"></div>'
+    + '<div class="full"><label>Checkout URL</label><input value="'+escAttr(w.checkoutUrl)+'" onchange="DATA.shop['+i+'].checkoutUrl=this.value"></div>'
+    + '<div class="full"><label>Shipping note</label><input value="'+escAttr(w.shipping||"")+'" onchange="DATA.shop['+i+'].shipping=this.value"></div>'
+    + '</div></div>'
+    + '<div class="btns" style="flex-direction:column">'
+    + '<button class="btn btn-sm btn-danger" onclick="deleteShopItem('+i+')">Delete</button>'
+    + '</div></div>';
+}
+
+// ---- Actions ----
+function updateField(pageKey, idx, field, val) {
+  DATA.pages[pageKey].images[idx][field] = val;
+}
+function updateSectionField(pageKey, si, idx, field, val) {
+  DATA.pages[pageKey].sections[si].images[idx][field] = val;
+}
+
+function deleteImg(pageKey, idx) {
+  if (!confirm("Delete this image?")) return;
+  DATA.pages[pageKey].images.splice(idx, 1);
+  renderAll();
+}
+function deleteSectionImg(pageKey, si, idx) {
+  if (!confirm("Delete this image?")) return;
+  DATA.pages[pageKey].sections[si].images.splice(idx, 1);
+  renderAll();
+}
+function deleteShopItem(idx) {
+  if (!confirm("Delete this shop item?")) return;
+  DATA.shop.splice(idx, 1);
+  renderAll();
+}
+function deleteSection(pageKey, si) {
+  if (!confirm("Delete this entire section?")) return;
+  DATA.pages[pageKey].sections.splice(si, 1);
+  renderAll();
+}
+function addSection(pageKey) {
+  DATA.pages[pageKey].sections.push({title:"New Section",description:"",images:[]});
+  renderAll();
+}
+function addShopItem() {
+  DATA.shop.push({id:"new-"+Date.now(),type:"original",title:"New Work",price:"$0.00",thumb:"",image:"",medium:"",dimensions:"",year:2025,checkoutUrl:"",description:"",shipping:""});
+  renderAll();
+}
+
+// ---- Upload ----
+function handleDrop(e, target) {
+  e.preventDefault();
+  handleFiles(e.dataTransfer.files, target);
+}
+function handleFiles(files, target) {
+  Array.from(files).forEach(function(file){
+    var fd = new FormData();
+    fd.append("file", file);
+    fetch("/api/upload", {method:"POST", body:fd})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.error) { alert(d.error); return; }
+      var parts = target.split("-");
+      if (parts.length === 1) {
+        // grid page
+        if (target === "shop") return; // shop uploads handled differently
+        DATA.pages[target].images.push({src:d.path, caption:"", alt:""});
+      } else {
+        // section page
+        var pageKey = parts.slice(0,-1).join("-");
+        var si = parseInt(parts[parts.length-1]);
+        DATA.pages[pageKey].sections[si].images.push({src:d.path, alt:""});
+      }
+      renderAll();
+      showStatus("Uploaded " + file.name);
+    });
+  });
+}
+
+// ---- Drag & drop reorder ----
+var dragSrc = null;
+function bindDragDrop() {
+  document.querySelectorAll(".img-item[draggable]").forEach(function(el){
+    el.addEventListener("dragstart", function(e){
+      dragSrc = {page:el.dataset.page, section:el.dataset.section, idx:parseInt(el.dataset.idx)};
+      e.dataTransfer.effectAllowed = "move";
+      el.style.opacity = ".4";
+    });
+    el.addEventListener("dragend", function(){ el.style.opacity = ""; });
+    el.addEventListener("dragover", function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      el.classList.add("drag-over");
+    });
+    el.addEventListener("dragleave", function(){ el.classList.remove("drag-over"); });
+    el.addEventListener("drop", function(e){
+      e.preventDefault();
+      el.classList.remove("drag-over");
+      if (!dragSrc) return;
+      var dst = {page:el.dataset.page, section:el.dataset.section, idx:parseInt(el.dataset.idx)};
+      if (dragSrc.page !== dst.page || dragSrc.section !== dst.section) return;
+      var arr;
+      if (dst.page === "shop") arr = DATA.shop;
+      else if (dst.section !== undefined && dst.section !== "") arr = DATA.pages[dst.page].sections[parseInt(dst.section)].images;
+      else arr = DATA.pages[dst.page].images;
+      var item = arr.splice(dragSrc.idx, 1)[0];
+      arr.splice(dst.idx, 0, item);
+      renderAll();
+    });
+  });
+}
+
+// ---- Save / Publish ----
+function saveData() {
+  fetch("/api/data", {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(DATA)})
+  .then(function(){ showStatus("Saved!"); });
+}
+function publish() {
+  saveData();
+  fetch("/api/publish", {method:"POST"})
+  .then(function(){ showStatus("Site published!"); });
+}
+
+// ---- Helpers ----
+function escAttr(s) { return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function escHtml(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+</script>
+</body>
+</html>

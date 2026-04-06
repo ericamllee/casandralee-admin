@@ -1,0 +1,523 @@
+{
+  "pages": {
+    "illustrations": {
+      "title": "Illustrations",
+      "type": "grid",
+      "images": [
+        {
+          "src": "assets/illustrations/charles-chen-2023.png",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/tim-lin-2024.jpg",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/reframe-2022.jpg",
+          "caption": "Album cover for Charles Chen, 2023",
+          "alt": "Album cover for Charles Chen, 2023"
+        },
+        {
+          "src": "assets/illustrations/reframe-2022-bw.png",
+          "caption": "Album cover for Tim Lin, 2024",
+          "alt": "Album cover for Tim Lin, 2024"
+        },
+        {
+          "src": "assets/illustrations/illustration-05-new.jpg",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/lunar-new-year-2022.jpg",
+          "caption": "Reframe Film Festival Poster, 2022",
+          "alt": "Reframe Film Festival Poster, 2022"
+        },
+        {
+          "src": "assets/illustrations/love-and-resistance-2021.jpg",
+          "caption": "Reframe Film Festival Poster, 2022: Black and White",
+          "alt": "Reframe Film Festival Poster, 2022: Black and White"
+        },
+        {
+          "src": "assets/illustrations/reframe-2023.jpg",
+          "caption": "Lunar New Year, 2022",
+          "alt": "Lunar New Year, 2022"
+        },
+        {
+          "src": "assets/illustrations/oatmeal-zine-2020.jpg",
+          "caption": "Love and Resistance, 2021",
+          "alt": "Love and Resistance, 2021"
+        },
+        {
+          "src": "assets/illustrations/illustration-09.jpg",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/illustration-10.jpg",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/illustration-13-new.jpg",
+          "caption": "",
+          "alt": "Illustration"
+        },
+        {
+          "src": "assets/illustrations/illustration-11.jpg",
+          "caption": "Reframe Film Festival Poster, 2023",
+          "alt": "Reframe Film Festival Poster, 2023"
+        },
+        {
+          "src": "assets/illustrations/illustration-12.jpg",
+          "caption": "Oatmeal Zine, Arthur, 2020",
+          "alt": "Oatmeal Zine, Arthur, 2020"
+        }
+      ]
+    },
+    "paintings": {
+      "title": "Paintings",
+      "type": "grid",
+      "images": [
+        {
+          "src": "assets/paintings/painting-new.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-01.png",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-02.png",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-03.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-04.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-05.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-06.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-07.jpg",
+          "caption": "",
+          "alt": "Painting"
+        },
+        {
+          "src": "assets/paintings/painting-08.jpg",
+          "caption": "",
+          "alt": "Painting"
+        }
+      ]
+    },
+    "childrens-books": {
+      "title": "Children's Books",
+      "type": "sections",
+      "sections": [
+        {
+          "title": "Building a Home",
+          "description": "<b><i>Building a Home</i></b> tells the tale of six children from Kazakhstan, Pakistan, Mexico, and Syria who moved to Nogojiwanong-Peterborough, Canada. The narrative integrates the experiences of these young individuals as they acquire English proficiency and acclimate to their new surroundings. Casandra collaborated individually with each child to document their accounts, and the children produced striking visuals during this collaboration. The publication was commissioned by the <a href=\"https://www.nccpeterborough.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">New Canadians Centre</a> and appears in seven language versions.",
+          "images": [
+            {
+              "src": "assets/childrens-books/building-a-home-01.jpg",
+              "alt": "Building a Home - Cover"
+            },
+            {
+              "src": "assets/childrens-books/building-a-home-02.jpg",
+              "alt": "Building a Home - Spread 1"
+            },
+            {
+              "src": "assets/childrens-books/building-a-home-03.jpg",
+              "alt": "Building a Home - Spread 2"
+            },
+            {
+              "src": "assets/childrens-books/building-a-home-04.jpg",
+              "alt": "Building a Home - Spread 3"
+            },
+            {
+              "src": "assets/childrens-books/building-a-home-05.jpg",
+              "alt": "Building a Home - Spread 4"
+            },
+            {
+              "src": "assets/childrens-books/building-a-home-06.jpg",
+              "alt": "Building a Home"
+            }
+          ]
+        },
+        {
+          "title": "The Sun Dance",
+          "description": "<b><i>The Sun Dance</i></b> is a love letter about the dance between the Earth and the Sun. The piece celebrates the remarkable cosmic relationship between these celestial bodies, emphasizing how their precise distance maintains habitability. The work conveys affection and appreciation for Earth's orbital journey.",
+          "images": [
+            {
+              "src": "assets/childrens-books/sun-dance-01.jpg",
+              "alt": "The Sun Dance - Cover"
+            },
+            {
+              "src": "assets/childrens-books/sun-dance-02.jpg",
+              "alt": "The Sun Dance - Spread 1"
+            },
+            {
+              "src": "assets/childrens-books/sun-dance-03.jpg",
+              "alt": "The Sun Dance - Spread 2"
+            },
+            {
+              "src": "assets/childrens-books/sun-dance-04.jpg",
+              "alt": "The Sun Dance - Spread 3"
+            },
+            {
+              "src": "assets/childrens-books/sun-dance-05.jpg",
+              "alt": "The Sun Dance - Spread 4"
+            },
+            {
+              "src": "assets/childrens-books/sun-dance-06.jpg",
+              "alt": "The Sun Dance - Spread 5"
+            }
+          ]
+        }
+      ]
+    },
+    "brand-illustrations": {
+      "title": "Brand Illustrations",
+      "type": "sections",
+      "sections": [
+        {
+          "title": "The Centre for Women and Trans People",
+          "description": "Below are illustrations and a logo created for The Centre for Women and Trans People. The group wanted illustrations that exuded community vibes. The lavender color was an existing component of the brand's identity. For the logo, The Centre asked for something simple yet powerful.",
+          "images": [
+            {
+              "src": "assets/brand-illustrations/centre-01.jpg",
+              "alt": "The Centre - Illustration 1"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-02.jpg",
+              "alt": "The Centre - Illustration 2"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-logo.png",
+              "alt": "The Centre - Logo"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-brand-01.png",
+              "alt": "The Centre - Brand Illustration"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-brand-02.png",
+              "alt": "The Centre - Brand Illustration"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-facebook.png",
+              "alt": "The Centre - Facebook Banner"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-new-02.png",
+              "alt": "The Centre - Illustration"
+            },
+            {
+              "src": "assets/brand-illustrations/centre-new-01.jpg",
+              "alt": "Banner made for The Centre's Facebook cover image",
+              "caption": "Banner made for The Centre's Facebook cover image",
+              "fullWidth": true
+            }
+          ]
+        },
+        {
+          "title": "PuzPuzPuzzles",
+          "description": "Here is a collection of illustrations that I created for PuzPuzPuzzles, an online and print puzzle maker.",
+          "images": [
+            {
+              "src": "assets/brand-illustrations/puzpuz-01.png",
+              "alt": "PuzPuzPuzzles - Illustration 1"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-02.png",
+              "alt": "PuzPuzPuzzles - Illustration 2"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-03.png",
+              "alt": "PuzPuzPuzzles - Illustration 3"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-04.png",
+              "alt": "PuzPuzPuzzles - Illustration 4"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-05.png",
+              "alt": "PuzPuzPuzzles - Illustration 5"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-06.png",
+              "alt": "PuzPuzPuzzles - Illustration 6"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-07.png",
+              "alt": "PuzPuzPuzzles - Illustration 7"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-08.png",
+              "alt": "PuzPuzPuzzles - Illustration 8"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-09.png",
+              "alt": "PuzPuzPuzzles - Illustration 9"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-10.png",
+              "alt": "PuzPuzPuzzles - Illustration 10"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-11.png",
+              "alt": "PuzPuzPuzzles - Illustration 11"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-12.png",
+              "alt": "PuzPuzPuzzles - Illustration 12"
+            },
+            {
+              "src": "assets/brand-illustrations/puzpuz-13.png",
+              "alt": "PuzPuzPuzzles - Illustration 13"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "shop": [
+    {
+      "id": "plums-peaches-and-a-crossword-print",
+      "type": "print",
+      "title": "Plums, Peaches, and a Crossword",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/plums-peaches-and-a-crossword.jpg",
+      "image": "assets/shop-detail/plums-peaches-and-a-crossword.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "24x24 in",
+      "year": 2025,
+      "checkoutUrl": "https://buy.stripe.com/fZu28k6AqaWp4ND54G9fW04",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "loquats-print",
+      "type": "print",
+      "title": "Loquats",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/loquats.jpg",
+      "image": "assets/shop-detail/loquats.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2024,
+      "checkoutUrl": "https://buy.stripe.com/9B68wIe2S8Oh93TgNo9fW01",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "loquats-original",
+      "type": "original",
+      "title": "Loquats",
+      "price": "$960.00",
+      "thumb": "assets/shop-thumbs/loquats.jpg",
+      "image": "assets/shop-detail/loquats.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "16x20 in",
+      "year": 2024,
+      "checkoutUrl": "https://buy.stripe.com/aFa28k2ka6G94NDgNo9fW00",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "goldenrod-dreams-print",
+      "type": "print",
+      "title": "Goldenrod Dreams",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/goldenrod-dreams.jpg",
+      "image": "assets/shop-detail/goldenrod-dreams.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/fZufZa9MC8Oh5RH1Su9fW0c",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "goldenrod-dreams-original",
+      "type": "original",
+      "title": "Goldenrod Dreams",
+      "price": "$1,800.00",
+      "thumb": "assets/shop-thumbs/goldenrod-dreams.jpg",
+      "image": "assets/shop-detail/goldenrod-dreams.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/7sY7sEf6We8Bcg5eFg9fW0d",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "go-train-reflections-original",
+      "type": "original",
+      "title": "GO Train Reflections",
+      "price": "$2,550.00",
+      "thumb": "assets/shop-thumbs/go-train-reflections.jpg",
+      "image": "assets/shop-detail/go-train-reflections.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "36x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/6oUbIU0c28Oh5RH8gS9fW02",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "go-train-reflections-print",
+      "type": "print",
+      "title": "GO Train Reflections",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/go-train-reflections.jpg",
+      "image": "assets/shop-detail/go-train-reflections.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/cNidR27Eu1lP3Jz8gS9fW0b",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "hot-pot-print",
+      "type": "print",
+      "title": "Hot Pot",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/hot-pot.jpg",
+      "image": "assets/shop-detail/hot-pot.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/4gMaEQ1g6e8Bcg5ap09fW0e",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "hot-pot-original",
+      "type": "original",
+      "title": "Hot Pot",
+      "price": "$1,600.00",
+      "thumb": "assets/shop-thumbs/hot-pot.jpg",
+      "image": "assets/shop-detail/hot-pot.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/14AdR2aQG3tX5RHcx89fW0f",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "sometimes-it-smells-like-oatmeal-original",
+      "type": "original",
+      "title": "Sometimes It Smells Like Oatmeal",
+      "price": "$1,800.00",
+      "thumb": "assets/shop-thumbs/sometimes-it-smells-like-oatmeal.jpg",
+      "image": "assets/shop-detail/sometimes-it-smells-like-oatmeal.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/fZu9AM9MC3tX1Br9kW9fW0a",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "sometimes-it-smells-like-oatmeal-print",
+      "type": "print",
+      "title": "Sometimes It Smells Like Oatmeal",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/sometimes-it-smells-like-oatmeal.jpg",
+      "image": "assets/shop-detail/sometimes-it-smells-like-oatmeal.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/00w5kw4si9Sl6VL2Wy9fW09",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "still-life-lemons-and-oranges-print",
+      "type": "print",
+      "title": "Still Life: Lemons and Oranges",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/still-life-lemons-and-oranges.jpg",
+      "image": "assets/shop-detail/still-life-lemons-and-oranges.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "30x24 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/00wcMY5wm0hLcg58gS9fW05",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "still-life-lemons-and-oranges-original",
+      "type": "original",
+      "title": "Still Life: Lemons and Oranges",
+      "price": "$1,400.00",
+      "thumb": "assets/shop-thumbs/still-life-lemons-and-oranges.jpg",
+      "image": "assets/shop-detail/still-life-lemons-and-oranges.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "24x20 in",
+      "year": 2023,
+      "checkoutUrl": "https://buy.stripe.com/eVq6oAcYO6G93Jz2Wy9fW06",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    },
+    {
+      "id": "under-an-apple-tree-print",
+      "type": "print",
+      "title": "Under an Apple Tree",
+      "price": "$150.00",
+      "thumb": "assets/shop-thumbs/under-an-apple-tree.jpg",
+      "image": "assets/shop-detail/under-an-apple-tree.jpg",
+      "medium": "Archival gicl\u00e9e print",
+      "dimensions": "24x24 in",
+      "year": 2022,
+      "checkoutUrl": "https://buy.stripe.com/00w8wI2ka2pT1Br54G9fW07",
+      "description": "Museum-grade paper, signed on the margin.",
+      "shipping": "Ships in 3 to 5 business days. Tracked shipping."
+    },
+    {
+      "id": "under-an-apple-tree-original",
+      "type": "original",
+      "title": "Under an Apple Tree",
+      "price": "$1,600.00",
+      "thumb": "assets/shop-thumbs/under-an-apple-tree.jpg",
+      "image": "assets/shop-detail/under-an-apple-tree.jpg",
+      "medium": "Oil on wood panel",
+      "dimensions": "24x24 in",
+      "year": 2022,
+      "checkoutUrl": "https://buy.stripe.com/5kQ14g0c21lP93TfJk9fW08",
+      "description": "Original painting. One-of-one.",
+      "shipping": ""
+    }
+  ],
+  "about": {
+    "photo": "assets/about/casandra.jpg",
+    "bio": [
+      "Casandra Lee is an Asian-American multimedia artist, based in Peterborough, Ontario. She loves about every medium available in the art store. Bright colors are prevalent throughout her work. Casandra is passionate about storytelling and capturing feelings better expressed through art. Her work is inspired by everything from the cosmos to communities to ladybugs.",
+      "In 2021, Casandra published a picture book with New Canadians Centre called Building a Home, which tells the story of newcomer children's adaptation to life in Canada. Her oil painting, Under an Apple Tree, was purchased by the City of Peterborough in 2023 and added to their public art collection.",
+      "When Casandra is not creating art, she works as a Montessori Teacher to a class of 3-6 year old children. In her spare time, she is cooking her cravings, tending to house plants, or taking long walks with her husband and daughter along the Otonabee River."
+    ],
+    "email": "casandramlee@gmail.com",
+    "instagram": "https://www.instagram.com/casandramlee/"
+  }
+}
