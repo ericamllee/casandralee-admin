@@ -13,11 +13,11 @@ h3{font-size:1rem;font-weight:600;margin:0 0 8px}
 
 /* Layout */
 .topbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.topbar .actions{display:flex;gap:8px}
+.topbar .actions{display:flex;gap:8px;flex-wrap:wrap}
 .container{max-width:1000px;margin:0 auto;padding:20px}
 
 /* Tabs */
-.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e5e5e5;padding-bottom:0}
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e5e5e5;padding-bottom:0;flex-wrap:wrap}
 .tab{padding:10px 16px;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:500;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
 .tab:hover{color:#1a1a1a}
 .tab.active{color:#1a1a1a;border-bottom-color:#7c8b6b}
@@ -26,14 +26,13 @@ h3{font-size:1rem;font-weight:600;margin:0 0 8px}
 
 /* Cards */
 .card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;margin-bottom:12px}
-.card h3{display:flex;align-items:center;gap:8px}
 
 /* Image list */
 .img-list{display:flex;flex-direction:column;gap:8px}
 .img-item{display:flex;align-items:center;gap:12px;padding:10px;background:#fafaf9;border:1px solid #e5e5e5;border-radius:8px;cursor:grab;transition:box-shadow .15s}
 .img-item:active{cursor:grabbing}
 .img-item.drag-over{box-shadow:0 0 0 2px #7c8b6b}
-.img-item img{width:80px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0}
+.img-item img{width:80px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#eee}
 .img-item .info{flex:1;min-width:0}
 .img-item .info input{width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem}
 .img-item .info label{font-size:.75rem;color:#888;display:block;margin-bottom:2px}
@@ -47,13 +46,10 @@ h3{font-size:1rem;font-weight:600;margin:0 0 8px}
 .btn-danger{color:#c44;border-color:#c44}
 .btn-danger:hover{background:#fef2f2}
 .btn-sm{padding:4px 8px;font-size:.78rem}
-.btn-icon{padding:4px 6px;font-size:1rem;line-height:1;background:none;border:none;cursor:pointer;opacity:.5}
-.btn-icon:hover{opacity:1}
 
-/* Upload zone */
-.upload-zone{border:2px dashed #ccc;border-radius:12px;padding:30px;text-align:center;color:#888;cursor:pointer;transition:.15s;margin-bottom:12px}
-.upload-zone:hover,.upload-zone.drag{border-color:#7c8b6b;color:#7c8b6b;background:#f8faf6}
-.upload-zone input{display:none}
+/* Add image by URL */
+.add-url{display:flex;gap:6px;margin-bottom:12px}
+.add-url input{flex:1;padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
 
 /* Shop item form */
 .shop-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -72,6 +68,10 @@ h3{font-size:1rem;font-weight:600;margin:0 0 8px}
 /* Checkbox row */
 .check-row{display:flex;gap:6px;align-items:center;margin:4px 0}
 .check-row input[type=checkbox]{accent-color:#7c8b6b}
+
+/* Info banner */
+.banner{background:#f0f4ec;border:1px solid #c5d4b5;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:.88rem;color:#3a4a2e}
+.banner code{background:#dde6d4;padding:2px 6px;border-radius:4px;font-size:.82rem}
 </style>
 </head>
 <body>
@@ -80,35 +80,102 @@ h3{font-size:1rem;font-weight:600;margin:0 0 8px}
   <h1>Site Admin</h1>
   <div class="actions">
     <button class="btn" onclick="saveData()">Save</button>
-    <button class="btn btn-primary" onclick="publish()">Publish Site</button>
+    <button class="btn" onclick="importJSON()">Import JSON</button>
+    <button class="btn btn-primary" onclick="exportJSON()">Download JSON</button>
   </div>
 </div>
 
 <div class="container">
+  <div class="banner">
+    <strong>How it works:</strong> Edit your site data here. Changes are saved to your browser.
+    Click <strong>Download JSON</strong> to get <code>site_data.json</code>, then run
+    <code>python3 admin/server.py --publish</code> locally to regenerate the HTML files.
+  </div>
   <div class="tabs" id="tabs"></div>
   <div id="panels"></div>
 </div>
 
+<input type="file" id="import-file" accept=".json" style="display:none">
 <div class="status" id="status"></div>
 
 <script>
 var DATA = null;
+var STORAGE_KEY = "casandralee-admin-data";
 var PAGE_KEYS = ["illustrations","paintings","childrens-books","brand-illustrations","shop"];
+
+// Base URL for images - adjust if hosting images elsewhere
+var IMG_BASE = "https://ericamllee.github.io/casandralee-website/";
 
 function showStatus(msg) {
   var el = document.getElementById("status");
   el.textContent = msg;
   el.classList.add("show");
-  setTimeout(function(){ el.classList.remove("show"); }, 2000);
+  setTimeout(function(){ el.classList.remove("show"); }, 2500);
 }
 
 // ---- Load data ----
-fetch("/api/data").then(r=>r.json()).then(function(d){
-  DATA = d;
-  buildTabs();
-  renderAll();
-});
+function init() {
+  var stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try { DATA = JSON.parse(stored); } catch(e) { DATA = null; }
+  }
+  if (!DATA) {
+    // Load default from site_data.json (same directory)
+    fetch("site_data.json").then(function(r){ return r.json(); }).then(function(d){
+      DATA = d;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+      buildTabs();
+      renderAll();
+    }).catch(function(){
+      alert("No saved data found. Please import a site_data.json file.");
+    });
+  } else {
+    buildTabs();
+    renderAll();
+  }
+}
+init();
 
+// ---- Save / Import / Export ----
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  showStatus("Saved to browser!");
+}
+
+function exportJSON() {
+  saveData();
+  var blob = new Blob([JSON.stringify(DATA, null, 2)], {type: "application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "site_data.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showStatus("Downloaded site_data.json");
+}
+
+function importJSON() {
+  var input = document.getElementById("import-file");
+  input.onchange = function() {
+    var file = input.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function() {
+      try {
+        DATA = JSON.parse(reader.result);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+        renderAll();
+        showStatus("Imported successfully!");
+      } catch(e) {
+        alert("Invalid JSON file");
+      }
+    };
+    reader.readAsText(file);
+    input.value = "";
+  };
+  input.click();
+}
+
+// ---- Tabs ----
 function buildTabs() {
   var tabs = document.getElementById("tabs");
   var labels = {"illustrations":"Illustrations","paintings":"Paintings","childrens-books":"Children's Books","brand-illustrations":"Brand Illustrations","shop":"Shop"};
@@ -143,11 +210,17 @@ function renderAll() {
   bindDragDrop();
 }
 
-// ---- Grid pages (illustrations, paintings) ----
+function imgSrc(path) {
+  if (!path) return "";
+  if (path.startsWith("http") || path.startsWith("data:")) return path;
+  return IMG_BASE + path;
+}
+
+// ---- Grid pages ----
 function renderGrid(pageKey) {
   var p = DATA.pages[pageKey];
   var html = '<div class="card"><h2>' + p.title + '</h2>';
-  html += uploadZone(pageKey);
+  html += addUrlBar(pageKey);
   html += '<div class="img-list" data-page="'+pageKey+'">';
   p.images.forEach(function(img, i){
     html += imgItem(pageKey, i, img);
@@ -156,10 +229,19 @@ function renderGrid(pageKey) {
   return html;
 }
 
+function addUrlBar(id) {
+  return '<div class="add-url">'
+    + '<input id="url-'+id+'" placeholder="Image path (e.g. assets/illustrations/new.jpg)">'
+    + '<button class="btn btn-sm" onclick="addByUrl(\''+id+'\')">Add image</button>'
+    + '</div>';
+}
+
 function imgItem(pageKey, i, img) {
   return '<div class="img-item" draggable="true" data-page="'+pageKey+'" data-idx="'+i+'">'
-    + '<img src="/'+img.src+'" alt="">'
+    + '<img src="'+imgSrc(img.src)+'" alt="" onerror="this.style.background=\'#ddd\'">'
     + '<div class="info">'
+    + '<label>Image path</label>'
+    + '<input value="'+escAttr(img.src||"")+'" onchange="updateField(\''+pageKey+'\','+i+',\'src\',this.value)" style="margin-bottom:4px">'
     + '<label>Caption (hover text)</label>'
     + '<input value="'+escAttr(img.caption||"")+'" onchange="updateField(\''+pageKey+'\','+i+',\'caption\',this.value)" placeholder="Leave blank for no caption">'
     + '<label style="margin-top:4px">Alt text</label>'
@@ -170,28 +252,18 @@ function imgItem(pageKey, i, img) {
     + '</div></div>';
 }
 
-function uploadZone(id) {
-  return '<div class="upload-zone" onclick="document.getElementById(\'file-'+id+'\').click()" '
-    + 'ondragover="event.preventDefault();this.classList.add(\'drag\')" '
-    + 'ondragleave="this.classList.remove(\'drag\')" '
-    + 'ondrop="handleDrop(event,\''+id+'\');this.classList.remove(\'drag\')">'
-    + 'Drop image here or click to upload'
-    + '<input type="file" id="file-'+id+'" accept="image/*" multiple onchange="handleFiles(this.files,\''+id+'\')">'
-    + '</div>';
-}
-
-// ---- Section pages (children's books, brand illustrations) ----
+// ---- Section pages ----
 function renderSections(pageKey) {
   var p = DATA.pages[pageKey];
   var html = '<div class="card"><h2>' + p.title + '</h2>';
   p.sections.forEach(function(sec, si){
     html += '<div class="section-editor">';
-    html += '<h3>'+sec.title+' <button class="btn btn-sm btn-danger" onclick="deleteSection(\''+pageKey+'\','+si+')">Remove section</button></h3>';
+    html += '<h3>'+escHtml(sec.title)+' <button class="btn btn-sm btn-danger" onclick="deleteSection(\''+pageKey+'\','+si+')">Remove section</button></h3>';
     html += '<label style="font-size:.75rem;color:#888">Section title</label>';
     html += '<input style="width:100%;padding:4px 8px;border:1px solid #ddd;border-radius:4px;font-size:.85rem;margin-bottom:6px" value="'+escAttr(sec.title)+'" onchange="DATA.pages[\''+pageKey+'\'].sections['+si+'].title=this.value">';
     html += '<label style="font-size:.75rem;color:#888">Description (HTML allowed)</label>';
     html += '<textarea onchange="DATA.pages[\''+pageKey+'\'].sections['+si+'].description=this.value">'+escHtml(sec.description)+'</textarea>';
-    html += uploadZone(pageKey+'-'+si);
+    html += addUrlBar(pageKey+'-'+si);
     html += '<div class="img-list" data-page="'+pageKey+'" data-section="'+si+'">';
     sec.images.forEach(function(img, i){
       html += sectionImgItem(pageKey, si, i, img);
@@ -206,8 +278,10 @@ function renderSections(pageKey) {
 function sectionImgItem(pageKey, si, i, img) {
   var fw = img.fullWidth ? ' checked' : '';
   return '<div class="img-item" draggable="true" data-page="'+pageKey+'" data-section="'+si+'" data-idx="'+i+'">'
-    + '<img src="/'+img.src+'" alt="">'
+    + '<img src="'+imgSrc(img.src)+'" alt="" onerror="this.style.background=\'#ddd\'">'
     + '<div class="info">'
+    + '<label>Image path</label>'
+    + '<input value="'+escAttr(img.src||"")+'" onchange="updateSectionField(\''+pageKey+'\','+si+','+i+',\'src\',this.value)" style="margin-bottom:4px">'
     + '<label>Alt text</label>'
     + '<input value="'+escAttr(img.alt||"")+'" onchange="updateSectionField(\''+pageKey+'\','+si+','+i+',\'alt\',this.value)">'
     + '<label>Caption (hover)</label>'
@@ -233,7 +307,7 @@ function renderShop() {
 
 function shopItem(w, i) {
   return '<div class="img-item" draggable="true" data-page="shop" data-idx="'+i+'" style="align-items:flex-start">'
-    + '<img src="/'+w.thumb+'" alt="">'
+    + '<img src="'+imgSrc(w.thumb)+'" alt="" onerror="this.style.background=\'#ddd\'">'
     + '<div class="info"><div class="shop-form">'
     + '<div><label>Title</label><input value="'+escAttr(w.title)+'" onchange="DATA.shop['+i+'].title=this.value"></div>'
     + '<div><label>Type</label><select onchange="DATA.shop['+i+'].type=this.value"><option value="original"'+(w.type==='original'?' selected':'')+'>Original</option><option value="print"'+(w.type==='print'?' selected':'')+'>Print</option></select></div>'
@@ -241,6 +315,8 @@ function shopItem(w, i) {
     + '<div><label>Medium</label><input value="'+escAttr(w.medium)+'" onchange="DATA.shop['+i+'].medium=this.value"></div>'
     + '<div><label>Dimensions</label><input value="'+escAttr(w.dimensions)+'" onchange="DATA.shop['+i+'].dimensions=this.value"></div>'
     + '<div><label>Year</label><input type="number" value="'+w.year+'" onchange="DATA.shop['+i+'].year=parseInt(this.value)"></div>'
+    + '<div class="full"><label>Thumb path</label><input value="'+escAttr(w.thumb)+'" onchange="DATA.shop['+i+'].thumb=this.value"></div>'
+    + '<div class="full"><label>Detail image path</label><input value="'+escAttr(w.image)+'" onchange="DATA.shop['+i+'].image=this.value"></div>'
     + '<div class="full"><label>Description</label><input value="'+escAttr(w.description)+'" onchange="DATA.shop['+i+'].description=this.value"></div>'
     + '<div class="full"><label>Checkout URL</label><input value="'+escAttr(w.checkoutUrl)+'" onchange="DATA.shop['+i+'].checkoutUrl=this.value"></div>'
     + '<div class="full"><label>Shipping note</label><input value="'+escAttr(w.shipping||"")+'" onchange="DATA.shop['+i+'].shipping=this.value"></div>'
@@ -256,6 +332,25 @@ function updateField(pageKey, idx, field, val) {
 }
 function updateSectionField(pageKey, si, idx, field, val) {
   DATA.pages[pageKey].sections[si].images[idx][field] = val;
+}
+
+function addByUrl(target) {
+  var input = document.getElementById("url-" + target);
+  var path = input.value.trim();
+  if (!path) return;
+  var parts = target.split("-");
+  // Check if it's a section target (e.g. "childrens-books-0")
+  var lastPart = parts[parts.length - 1];
+  if (!isNaN(parseInt(lastPart)) && parts.length > 1) {
+    var si = parseInt(lastPart);
+    var pageKey = parts.slice(0, -1).join("-");
+    DATA.pages[pageKey].sections[si].images.push({src: path, alt: "", caption: ""});
+  } else {
+    DATA.pages[target].images.push({src: path, caption: "", alt: ""});
+  }
+  input.value = "";
+  renderAll();
+  showStatus("Added image");
 }
 
 function deleteImg(pageKey, idx) {
@@ -285,36 +380,6 @@ function addSection(pageKey) {
 function addShopItem() {
   DATA.shop.push({id:"new-"+Date.now(),type:"original",title:"New Work",price:"$0.00",thumb:"",image:"",medium:"",dimensions:"",year:2025,checkoutUrl:"",description:"",shipping:""});
   renderAll();
-}
-
-// ---- Upload ----
-function handleDrop(e, target) {
-  e.preventDefault();
-  handleFiles(e.dataTransfer.files, target);
-}
-function handleFiles(files, target) {
-  Array.from(files).forEach(function(file){
-    var fd = new FormData();
-    fd.append("file", file);
-    fetch("/api/upload", {method:"POST", body:fd})
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if (d.error) { alert(d.error); return; }
-      var parts = target.split("-");
-      if (parts.length === 1) {
-        // grid page
-        if (target === "shop") return; // shop uploads handled differently
-        DATA.pages[target].images.push({src:d.path, caption:"", alt:""});
-      } else {
-        // section page
-        var pageKey = parts.slice(0,-1).join("-");
-        var si = parseInt(parts[parts.length-1]);
-        DATA.pages[pageKey].sections[si].images.push({src:d.path, alt:""});
-      }
-      renderAll();
-      showStatus("Uploaded " + file.name);
-    });
-  });
 }
 
 // ---- Drag & drop reorder ----
@@ -348,17 +413,6 @@ function bindDragDrop() {
       renderAll();
     });
   });
-}
-
-// ---- Save / Publish ----
-function saveData() {
-  fetch("/api/data", {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(DATA)})
-  .then(function(){ showStatus("Saved!"); });
-}
-function publish() {
-  saveData();
-  fetch("/api/publish", {method:"POST"})
-  .then(function(){ showStatus("Site published!"); });
 }
 
 // ---- Helpers ----

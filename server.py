@@ -347,5 +347,11 @@ def _generate_site(data):
 
 
 if __name__ == "__main__":
-    print("Admin CMS running at http://localhost:5000")
-    app.run(port=5000, debug=False)
+    import sys
+    if "--publish" in sys.argv:
+        print("Regenerating site from site_data.json...")
+        _generate_site(load_data())
+        print("Done! All HTML files updated.")
+    else:
+        print("Admin CMS running at http://localhost:5000")
+        app.run(port=5000, debug=False)
