@@ -106,6 +106,8 @@ def _head(title):
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.jpg">
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,7 +200,7 @@ def _generate_site(data):
                     if img.get("caption"):
                         cap_html = f'\n          <div class="caption">{img["caption"]}</div>'
                     imgs += f'''        <div class="grid-item" style="grid-column: 1 / -1; border: none;">
-          <img src="{img['src']}" alt="{img.get('alt','')}" loading="lazy" style="border-radius: var(--radius); border: 1px solid var(--line);">{cap_html}
+          <img src="{img['src']}" alt="{img.get('alt','')}" loading="lazy" style="border: 1px solid var(--line);">{cap_html}
         </div>\n'''
                 else:
                     imgs += f'        <img src="{img["src"]}" alt="{img.get("alt","")}" loading="lazy">\n'
